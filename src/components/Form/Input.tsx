@@ -1,3 +1,4 @@
+import { FieldError } from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -7,12 +8,8 @@ import {
   InputLeftElement,
   InputGroup,
 } from "@chakra-ui/react";
-
-import { FaExclamation } from "react-icons/fa";
-
-import { useState, useEffect, useCallback, useRef } from "react";
-import { FieldError } from "react-hook-form";
 import { IconType } from "react-icons/lib";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 interface InputProps extends ChakraInputProps {
   name: string;
@@ -21,36 +18,78 @@ interface InputProps extends ChakraInputProps {
   icon?: IconType;
 }
 
+type inputVariationOptions = {
+  [key: string]: string;
+};
+
+const inputVariation: inputVariationOptions = {
+  error: "red.500",
+  default: "gray.200",
+  focus: "purple.800",
+  filled: "green.500",
+};
+
 export const Input = ({
   name,
-  error = null,
-  icon: Icon,
   label,
+  icon: Icon,
+  error = null,
   ...rest
 }: InputProps) => {
+  const [variation, setVariation] = useState("default");
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      return setVariation("error");
+    }
+  }, [error]);
+
+  const handleInputFocus = useCallback(() => {
+    if (!error) {
+      setVariation("focus");
+    }
+  }, [error]);
+
+  const handleInputBlur = useCallback(() => {
+    if (inputRef.current?.value && !error) {
+      return setVariation("filled");
+    }
+  }, [error]);
+
+  console.log(inputRef.current?.value);
+
   return (
-    <FormControl>
+    <FormControl isInvalid={!!error}>
       {!!label && <FormLabel>{label}</FormLabel>}
 
       <InputGroup flexDirection="column">
         {Icon && (
-          <InputLeftElement mt="2.5">
+          <InputLeftElement color={inputVariation[variation]} mt="2.5">
             <Icon />
           </InputLeftElement>
         )}
 
         <ChakraInput
+          id={name}
           name={name}
+          onBlurCapture={handleInputBlur}
+          onFocus={handleInputFocus}
+          borderColor={inputVariation[variation]}
+          color={inputVariation[variation]}
           bg="gray.50"
           variant="outline"
           _hover={{ bgColor: "gray.100" }}
-          _placeholder={{ color: "gray.300" }}
+          _placeholder={{ color: "gray.200" }}
           size="lg"
           h="60px"
           {...rest}
         />
 
-        {!!error && <FormErrorMessage>{error.message}</FormErrorMessage>}
+        {!!error && (
+          <FormErrorMessage color="red.500">{error.message}</FormErrorMessage>
+        )}
       </InputGroup>
     </FormControl>
   );

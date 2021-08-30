@@ -1,15 +1,39 @@
-import { Flex, Heading, Text, Grid, Image, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Text,
+  Grid,
+  Image,
+  VStack,
+  Button,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import LogoSecondary from "../../assets/logo-secondary.svg";
 import { Input } from "../../components/Form/Input";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const signInSchema = yup.object().shape({
+  email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
+  password: yup.string().required("Senha obrigatória"),
+});
+
+interface SignInData {
+  email: string;
+  password: string;
+}
 
 export const Login = () => {
   const {
     formState: { errors },
     register,
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(signInSchema),
+  });
+
+  const handleSignIn = (data: SignInData) => console.log(data);
 
   return (
     <Flex
@@ -34,9 +58,10 @@ export const Login = () => {
           </Text>
         </Grid>
         <Grid
+          onSubmit={handleSubmit(handleSignIn)}
           as="form"
           mt="4"
-          w="100%"
+          w="50%"
           padding="30px 15px"
           border="3px solid"
           borderColor="gray.100"
@@ -47,15 +72,22 @@ export const Login = () => {
           <VStack mt="6" spacing="5">
             <Input
               placeholder="Digite seu login"
+              type="email"
+              label="Login"
+              error={errors.email}
               icon={FaEnvelope}
-              name="email"
+              {...register("email")}
             />
             <Input
+              type="password"
               placeholder="Digite sua senha"
+              label="Senha"
+              error={errors.password}
               icon={FaLock}
               {...register("password")}
             />
           </VStack>
+          <Button type="submit">Entrar</Button>
         </Grid>
       </Flex>
     </Flex>

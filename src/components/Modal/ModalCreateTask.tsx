@@ -39,7 +39,7 @@ const createTaskSchema = yup.object().shape({
     .max(100, "Máximo de 100 caracteres"),
 });
 
-export const ModalCreateTaks = ({ isOpen, onClose }: ModalCreateTaskProps) => {
+export const ModalCreateTask = ({ isOpen, onClose }: ModalCreateTaskProps) => {
   const {
     formState: { errors },
     register,

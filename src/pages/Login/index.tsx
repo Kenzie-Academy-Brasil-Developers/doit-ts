@@ -1,16 +1,5 @@
-import {
-  Flex,
-  Heading,
-  Text,
-  Grid,
-  Image,
-  VStack,
-  Button,
-  Box,
-} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { Input } from "../../components/Form/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";

@@ -18,6 +18,7 @@
     "@types/react-dom": "^17.0.0",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.20.0",
+    "cypress": "^8.5.0",
     "emotion": "^11.0.0",
     "framer-motion": "^4.1.17",
     "history": "^5.0.1",
@@ -41,7 +42,8 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ]
   },
   "browserslist": {
@@ -57,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.8"
+    "@types/react-router-dom": "^5.1.8",
+    "eslint-plugin-cypress": "^2.12.1"
   }
 }
